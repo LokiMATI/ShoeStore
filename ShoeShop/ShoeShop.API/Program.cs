@@ -1,3 +1,4 @@
+using ShoeShop.API.Properties;
 using ShoeShop.Library.Contexts;
 using ShoeShop.Library.Services;
 
@@ -14,6 +15,22 @@ builder.Services.AddDbContext<ShoeDbContext>();
 
 builder.Services.AddScoped<ProductService>();
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = AuthOptions.ISSURE,
+            ValidateAudience = true,
+            ValidAudience = AuthOptions.AUDIENCE,
+            ValidateLifetime = true,
+            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
