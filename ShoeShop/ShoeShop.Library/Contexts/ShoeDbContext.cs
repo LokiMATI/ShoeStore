@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using ShoeShop.Library.Models;
 
 namespace ShoeShop.Library.Contexts;
@@ -137,7 +139,9 @@ public partial class ShoeDbContext : DbContext
             entity.Property(e => e.MeasurementUnit)
                 .HasMaxLength(20)
                 .HasColumnName("measurementUnit");
-            entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("price");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.SupplierId).HasColumnName("supplierId");
             entity.Property(e => e.Title)
