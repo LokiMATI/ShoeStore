@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ShoeDbContext>();
 
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

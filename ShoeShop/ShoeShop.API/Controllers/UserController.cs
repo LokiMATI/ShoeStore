@@ -32,7 +32,7 @@ public class UserController(ShoeDbContext context) : ControllerBase
         var claims = new List<Claim>
         {
             new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Role, user.Role.Title)
+            new(ClaimsIdentity.DefaultRoleClaimType, user.Role.Title)
         };
         
         var jwt = new JwtSecurityToken(
