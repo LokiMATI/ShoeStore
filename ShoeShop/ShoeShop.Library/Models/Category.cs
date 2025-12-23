@@ -1,22 +1,13 @@
-﻿namespace ShoeShop.Library.Models;
+﻿using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// Категория
-/// </summary>
+namespace ShoeShop.Library.Models;
+
 public partial class Category
 {
-    /// <summary>
-    /// Идентификатор
-    /// </summary>
     public short CategoryId { get; set; }
 
-    /// <summary>
-    /// Название
-    /// </summary>
     public string Title { get; set; } = null!;
 
-    /// <summary>
-    /// Продуты категории
-    /// </summary>
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

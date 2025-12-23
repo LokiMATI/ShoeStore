@@ -1,22 +1,13 @@
-﻿namespace ShoeShop.Library.Models;
+﻿using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// Поставщик
-/// </summary>
+namespace ShoeShop.Library.Models;
+
 public partial class Supplier
 {
-    /// <summary>
-    /// Идентификатор
-    /// </summary>
     public short SupplierId { get; set; }
 
-    /// <summary>
-    /// Название
-    /// </summary>
     public string Title { get; set; } = null!;
 
-    /// <summary>
-    /// Продукты
-    /// </summary>
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
