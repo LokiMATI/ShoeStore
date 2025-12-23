@@ -1,0 +1,98 @@
+@page
+@model ShoeShop.Web.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Товары";
+}
+
+<h1>Товары</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form method="get">
+    <input type="text"
+        name="filmTitle"
+        value="@Model.SearchString"
+        placeholder="Поиск..."
+           onchange="this.form.submit()"
+           class="form-control" />
+
+    <select class="form-control"
+            name="sortColumn"
+            onchange="this.form.submit()">
+        <option value="price" selected="@(Model.SortColumn == "price")">
+            По цене (дешевые)
+        </option>
+        <option value="price_desc" selected="@(Model.SortColumn == "price_desc")">
+            По цене (дорогие)
+        </option>
+        <option value="title" selected="@(Model.SortColumn == "title")">
+            По названию
+        </option>
+        <option value="supplier" selected="@(Model.SortColumn == "supplier")">
+            По поставщику
+        </option>
+    </select>
+
+    <select class="form-control" asp-items="ViewBag.Manufacturer"
+            asp-for="Manufacturer"
+            name="manufacturer"
+            onchange="this.form.submit()">
+    </select>
+
+    <div class="form-check">
+        <input asp-for="IsHasFlag" class="form-check-input" onchange="this.form.submit()"/>
+        <label asp-for="IsHasFlag" class="form-check-label">
+            Есть на складе
+        </label>
+    </div>
+    <div class="form-check">
+        <input asp-for="IsHasDiscountFlag" class="form-check-input" onchange="this.form.submit()"/>
+        <label asp-for="IsHasDiscountFlag" class="form-check-label">
+            Есть скидка
+        </label>
+    </div>
+</form>
+
+@foreach (var product in Model.Product)
+{
+    <div class="product-container">
+        <img class="image-container"
+             src="@(product.Image is null ? "images/picture.png" : $"data:image/jpeg;base64,{Convert.ToBase64String(product.Image.Bytes)}")"
+             alt="Пусто"/>
+        <div class="info-block">
+            <p>
+                @product.Category.Title | @product.Title <br/>
+                Описание товара: @product.Description <br/>
+                Производитель: @product.Manufacturer.Title <br/>
+                Поставщик: @product.Supplier.Title <br/>
+                Цена: @if (product.Discount > 0)
+                      {
+                          <s>@product.Price</s> @(product.Price * (1 - (decimal)product.Discount / 100)) 
+                      }
+                      else
+                      {
+                          @product.Price
+                      }
+                рублей<br/>
+                Единица измерения: @product.MeasurementUnit <br/>
+                Количество на складе: @product.Quantity
+            </p>
+        </div>
+        <div>
+            <div class="@(product.Discount > 15 ? "special-discount-info" : "discount-info")">
+                @product.Discount %
+            </div>
+            <form method="post">
+                <div class="form-group">
+                    <input type="submit" value="Заказать"
+                           asp-route-article="@product.Article"
+                           class="btn btn-primary"/>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+}

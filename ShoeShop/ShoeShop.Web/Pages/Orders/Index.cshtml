@@ -1,0 +1,49 @@
+@page
+@using System.Text
+@model ShoeShop.Web.Pages.Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Заказы";
+}
+
+<h1>Заказы</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Код
+            </th>
+            <th>
+                Состав
+            </th>
+            <th>
+                Дата заказа
+            </th>
+            <th>
+                Итоговая стоимость
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Order)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                <p>
+                    @Html.DisplayFor(modelItem => item.Articles)
+                </p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total) рублей
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
