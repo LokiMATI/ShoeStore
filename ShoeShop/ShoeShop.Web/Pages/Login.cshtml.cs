@@ -43,13 +43,13 @@ public class Login(ShoeDbContext context) : PageModel
         HttpContext.Session.SetString("Fullname", $"{user.Surname} {user.Name} {user.Patronymic ?? string.Empty}".Trim());
         HttpContext.Session.SetString("Role", user.Role.Title);
         HttpContext.Session.SetString("UserId", user.UserId.ToString());
-        return RedirectToPage("/Products/Index");
+        return RedirectToPage("/Index");
     }
 
     public async Task<IActionResult> OnPostGuestAsync()
     {
         HttpContext.Session.Clear();
         HttpContext.Session.SetString("Role", "Гость");
-        return RedirectToPage("/Products/Index");
+        return RedirectToPage("/Index");
     }
 }
