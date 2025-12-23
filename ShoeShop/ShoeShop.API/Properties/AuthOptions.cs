@@ -8,7 +8,7 @@ namespace ShoeShop.API.Properties;
 /// </summary>
 public class AuthOptions
 {
-    public const string ISSURE = "ShoeShopWebApi";
+    public const string ISSUER = "ShoeShopWebApi";
     public const string AUDIENCE = "OfficalViewShoeShop";
     private const string KEY = "ShoeShopSecretKey_wdadnoiawndncwncw";
 

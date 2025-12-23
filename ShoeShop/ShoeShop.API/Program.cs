@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ShoeShop.API.Properties;
 using ShoeShop.Library.Contexts;
 using ShoeShop.Library.Services;
@@ -16,13 +17,13 @@ builder.Services.AddDbContext<ShoeDbContext>();
 builder.Services.AddScoped<ProductService>();
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new()
         {
             ValidateIssuer = true,
-            ValidIssuer = AuthOptions.ISSURE,
+            ValidIssuer = AuthOptions.ISSUER,
             ValidateAudience = true,
             ValidAudience = AuthOptions.AUDIENCE,
             ValidateLifetime = true,
