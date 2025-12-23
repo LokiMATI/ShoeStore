@@ -4,19 +4,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeShop.Library", "ShoeSho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeShop.API", "ShoeShop.API\ShoeShop.API.csproj", "{6E04F24B-2510-44D8-87CD-6EA0D834D044}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeShop.Web", "ShoeShop.Web\ShoeShop.Web.csproj", "{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		API + Web|Any CPU = API + Web|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8C3574B9-A887-407A-AFB3-407C22A41015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C3574B9-A887-407A-AFB3-407C22A41015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C3574B9-A887-407A-AFB3-407C22A41015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C3574B9-A887-407A-AFB3-407C22A41015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C3574B9-A887-407A-AFB3-407C22A41015}.API + Web|Any CPU.ActiveCfg = API + Web|Any CPU
+		{8C3574B9-A887-407A-AFB3-407C22A41015}.API + Web|Any CPU.Build.0 = API + Web|Any CPU
 		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.API + Web|Any CPU.ActiveCfg = API + Web|Any CPU
+		{6E04F24B-2510-44D8-87CD-6EA0D834D044}.API + Web|Any CPU.Build.0 = API + Web|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.API + Web|Any CPU.ActiveCfg = API + Web|Any CPU
+		{24D4311F-3F84-4D89-BBFD-0C1339A9BFB9}.API + Web|Any CPU.Build.0 = API + Web|Any CPU
 	EndGlobalSection
 EndGlobal

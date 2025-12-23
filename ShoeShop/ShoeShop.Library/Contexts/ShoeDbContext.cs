@@ -59,6 +59,7 @@ public partial class ShoeDbContext : DbContext
             entity.Property(e => e.ImageId)
                 .ValueGeneratedNever()
                 .HasColumnName("imageId");
+            entity.Property(e => e.Bytes).HasColumnName("bytes");
             entity.Property(e => e.Name)
                 .HasMaxLength(256)
                 .HasColumnName("name");
