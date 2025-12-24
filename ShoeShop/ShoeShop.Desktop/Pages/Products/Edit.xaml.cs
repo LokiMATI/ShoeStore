@@ -1,7 +1,9 @@
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using ShoeShop.Desktop.Dtos;
 using ShoeShop.Library.Contexts;
@@ -18,25 +20,47 @@ public partial class Edit : Page
     private bool _isCreated = true;
     
     private readonly ShoeDbContext _context = new();
-    
-    public Edit(ProductDesktopDto? product = null)
+
+    public Edit()
     {
         DataContext = this;
-        if (product is not null)
-        {
-            _product = product.Product;
-            _isCreated = false;
-            if (_product.Image is not null)
-                _imagePath = $"{product.ImageUrl}";
-
-            LoadImage();
-        }
         
         InitializeComponent();
         
         LoadManufacturers();
         LoadSuppliers();
         LoadCategories();
+
+        ActionButton.Content = _isCreated ? "Создать" : "Редактировать";
+    }
+    
+    public Edit(string article) : this()
+    {
+        _product = _context.Products
+            .Include(p => p.Image)
+            .Include(p => p.Category)
+            .Include(p => p.Supplier)
+            .Include(p => p.Manufacturer)
+            .FirstOrDefault(p => p.Article == article);
+        
+        if (_product is null)
+            NavigationService.GoBack();
+        _isCreated = false;
+        if (_product.Image is not null)
+        {
+            _imagePath = $"../../{_product.Image.Name}";
+            LoadImage();
+        }
+        
+        TitleTextBox.Text = _product.Title;
+        DescriptionTextBox.Text = _product.Description;
+        MeasurementUnitTextBox.Text = _product.MeasurementUnit;
+        PriceTextBox.Text = _product.Price.ToString();
+        SupplierComboBox.SelectedIndex = SupplierComboBox.Items.IndexOf(_product.Supplier);
+        ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items.IndexOf(_product.Manufacturer);
+        CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items.IndexOf(_product.Category);
+        DiscountTextBox.Text = _product.Discount.ToString();
+        QuantityTextBox.Text = _product.Quantity.ToString();
 
         ActionButton.Content = _isCreated ? "Создать" : "Редактировать";
     }
@@ -126,6 +150,7 @@ public partial class Edit : Page
         input.SupplierId = ((Supplier)SupplierComboBox.SelectionBoxItem).SupplierId;
         input.ManufacturerId = ((Manufacturer)ManufacturerComboBox.SelectionBoxItem).ManufacturerId;
         input.CategoryId = ((Category)CategoryComboBoxBox.SelectionBoxItem).CategoryId;
+        input.Description = DescriptionTextBox.Text.Trim();
 
         if (!string.IsNullOrWhiteSpace(_imagePath) && _product.Image is not null && _product.Image.ImageId != 0)
         {
@@ -178,6 +203,7 @@ public partial class Edit : Page
         input.SupplierId = ((Supplier)SupplierComboBox.SelectionBoxItem).SupplierId;
         input.ManufacturerId = ((Manufacturer)ManufacturerComboBox.SelectionBoxItem).ManufacturerId;
         input.Category = ((Category)CategoryComboBoxBox.SelectionBoxItem).Title;
+        input.Description = DescriptionTextBox.Text.Trim();
 
         if (!string.IsNullOrWhiteSpace(_imagePath) && _product.Image is not null && _product.Image.ImageId != 0)
         {
@@ -199,7 +225,6 @@ public partial class Edit : Page
         ProductService service = new(_context);
 
         service.UpdateAsync(_product.Article, input);
-
     }
 
     private void CancelButton_OnClick(object sender, RoutedEventArgs e)

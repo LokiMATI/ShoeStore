@@ -124,7 +124,7 @@ public partial class ProductsList : Page
         
         var product = ProductsListBox.SelectedItem as ProductDesktopDto;
 
-        NavigationService.Navigate(new Edit(product));
+        NavigationService.Navigate(new Edit(product.Product.Article));
     }
 
     private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
@@ -134,8 +134,12 @@ public partial class ProductsList : Page
             MessageBox.Show("Для удаление продуктов выберите хотя бы один продукт.", "Не выбран элемент", MessageBoxButton.OK, MessageBoxImage.Stop);
             return;
         }
+
+        var products = ProductsListBox.SelectedItems.Cast<ProductDesktopDto>().ToList()
+            .Select(p => p.Product);
         
-        _context.Products.RemoveRange(ProductsListBox.SelectedItems as IEnumerable<Product>);
+        _context.Products.RemoveRange(products);
+        _context.SaveChanges();
         LoadProducts();
     }
 }

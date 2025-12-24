@@ -54,6 +54,9 @@ public class ProductService(ShoeDbContext context)
         if (input.Title is not null)
             product.Title = input.Title;
         
+        if (input.Description is not null)
+            product.Description = input.Description;
+        
         if (input.MeasurementUnit is not null)
             product.MeasurementUnit = input.MeasurementUnit;
         

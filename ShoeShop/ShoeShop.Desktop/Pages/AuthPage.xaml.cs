@@ -17,21 +17,24 @@ public partial class AuthPage : Page
         InitializeComponent();
     }
 
-    private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
+        LoginButton.IsEnabled = false;
         if (string.IsNullOrWhiteSpace(LoginTextBox.Text) || string.IsNullOrWhiteSpace(PasswordBox.Password))
         {
             MessageBox.Show("Поля для авторизации пустые!", "Некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
+            LoginButton.IsEnabled = true;
             return;
         }
         
-        var user = await _context.Users
+        var user = _context.Users
             .Include(u => u.Role) 
-            .FirstOrDefaultAsync(u => u.Email == LoginTextBox.Text.Trim());
+            .FirstOrDefault(u => u.Email == LoginTextBox.Text.Trim());
 
         if (user is null)
         {
             MessageBox.Show("Такого пользователя нет!", "Некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
+            LoginButton.IsEnabled = true;
             return;
         }
         
@@ -42,6 +45,7 @@ public partial class AuthPage : Page
         {
             MessageBox.Show("Неверный пароль!", "Некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
             PasswordBox.Password = string.Empty;
+            LoginButton.IsEnabled = true;
             return;
         }
 

@@ -13,6 +13,6 @@
         <Label Content="Пароль"/>
         <PasswordBox x:Name="PasswordBox" Width="200" Margin="20 5 20 5"/>
         
-        <Button Content="Войти" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonBase_OnClick"/>
+        <Button x:Name="LoginButton" Content="Войти" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonBase_OnClick"/>
     </StackPanel>
 </Page>
