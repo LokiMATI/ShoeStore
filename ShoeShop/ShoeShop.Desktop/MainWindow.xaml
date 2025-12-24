@@ -6,94 +6,18 @@
         xmlns:local="clr-namespace:ShoeShop.Desktop"
         xmlns:library="clr-namespace:ShoeShop.Library.Models;assembly=ShoeShop.Library"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="700"
+        Title="MainWindow"
         MinHeight="700"
-        MinWidth="700">
-    <DockPanel LastChildFill="True">
-        <StackPanel
-            DockPanel.Dock="Top"
-            Orientation="Vertical">
-            <Label Content="Поисковая строка"/>
-            <TextBox x:Name="SearchTextBox" Height="25" TextChanged="TextBox_OnTextChanged"/>
-            
-            <Label Content="Производитель"/>
-            <ComboBox x:Name="ManufacturerComboBox" Height="25" SelectionChanged="ComboBox_OnSelected"/>
-            
-            <Label Content="Максимальная цена"/>
-            <TextBox x:Name="MaxPriceTextBox" Height="25" TextChanged="TextBox_OnTextChanged"/>
-            
-            <StackPanel Orientation="Horizontal">
-                <CheckBox x:Name="DiscountCheckBox" IsChecked="False" VerticalAlignment="Center" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
-                <Label Content="Товары со скидкой" VerticalContentAlignment="Center"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
-                <CheckBox x:Name="HasCheckBox" IsChecked="False" VerticalAlignment="Center" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
-                <Label Content="Товар есть в наличии" VerticalContentAlignment="Center"/>
-            </StackPanel>
-            
-            <Label Content="Сортировка"/>
-            <ComboBox x:Name="SortComboBox" Height="25" SelectionChanged="ComboBox_OnSelected"/>
-        </StackPanel>
+        MinWidth="850">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         
-        <ListBox x:Name="ProductsListBox"
-                 Height="500px"
-                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                 DockPanel.Dock="Bottom">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <Image DockPanel.Dock="Left"
-                               Source="{Binding Path=Image.Name}"
-                               Width="200"/>
-                        
-                        <StackPanel DockPanel.Dock="Bottom">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Path=Category.Title}" FontWeight="Bold"/>
-                                <TextBlock Text=" | " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Path=Title}" FontWeight="Bold"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Описание товара: "/>
-                                <TextBlock Text="{Binding Path=Description}"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Производитель: "/>
-                                <TextBlock Text="{Binding Path=Manufacturer.Title}"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Поставщик: "/>
-                                <TextBlock Text="{Binding Path=Supplier.Title}"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Цена: "/>
-                                <TextBlock Text="{Binding Path=Price}"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Единица измерения: "/>
-                                <TextBlock Text="{Binding Path=MeasurementUnit}"/>
-                            </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Количество на складе: "/>
-                                <TextBlock Text="{Binding Path=Quantity}"/>
-                            </StackPanel>
-                        </StackPanel>
-                        
-                        <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200">
-                            <StackPanel Orientation="Horizontal" Width="100" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Path=Discount}" TextAlignment="Center"/>
-                                <TextBlock Text="%" TextAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </DockPanel>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+    </Grid>
 </Window>

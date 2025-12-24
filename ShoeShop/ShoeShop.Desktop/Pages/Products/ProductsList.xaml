@@ -1,0 +1,127 @@
+<Page x:Class="ShoeShop.Desktop.Pages.Products.ProductsList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:ShoeShop.Desktop.Pages.Products"
+      mc:Ignorable="d"
+      Title="ProductsList" MinHeight="700" MinWidth="800">
+    <DockPanel LastChildFill="True">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical"
+            VerticalAlignment="Stretch">
+            <Label Content="Поисковая строка"/>
+            <TextBox x:Name="SearchTextBox" Height="25" TextChanged="TextBox_OnTextChanged"/>
+            
+            <Label Content="Производитель"/>
+            <ComboBox x:Name="ManufacturerComboBox" Height="25" SelectionChanged="ComboBox_OnSelected"/>
+            
+            <Label Content="Максимальная цена"/>
+            <TextBox x:Name="MaxPriceTextBox" Height="25" TextChanged="TextBox_OnTextChanged"/>
+            
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="DiscountCheckBox" IsChecked="False" VerticalAlignment="Center" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
+                <Label Content="Товары со скидкой" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="HasCheckBox" IsChecked="False" VerticalAlignment="Center" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
+                <Label Content="Товар есть в наличии" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            
+            <Label Content="Сортировка"/>
+            <ComboBox x:Name="SortComboBox" Height="25" SelectionChanged="ComboBox_OnSelected"/>
+            
+            <StackPanel x:Name="EditStackPanel" Orientation="Horizontal" Height="40">
+                <Button x:Name="CreateButton" Content="Создать" Margin="3 10 5 2" Click="CreateButton_OnClick"/>
+                <Button x:Name="UpdateButton" Content="Редактировать" Margin="3 10 5 2" Click="UpdateButton_OnClick"/>
+                <Button x:Name="DeleteButton" Content="Удалить" Margin="3 10 5 2" Click="DeleteButton_OnClick"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <ListBox x:Name="ProductsListBox"
+                 MinHeight="500"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 HorizontalAlignment="Stretch"
+                 SelectionMode="Extended">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Height="250" LastChildFill="True" HorizontalAlignment="Stretch">
+                        <DockPanel.Style>
+                            <Style TargetType="DockPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHas}" Value="False">
+                                        <Setter Property="Background" Value="Aqua"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsHas}" Value="True">
+                                        <Setter Property="Background" Value="#7FFF00"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DockPanel.Style>
+                        <Image DockPanel.Dock="Left"
+                               Source="{Binding Path=ImageUrl}"
+                               Width="200"/>
+                        
+                        <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Width="100">
+                                <TextBlock Text="{Binding Path=Product.Discount}" TextAlignment="Center"/>
+                                <TextBlock Text="%" TextAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Product.Category.Title}" FontWeight="Bold"/>
+                                <TextBlock Text=" | " FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Path=Product.Title}" FontWeight="Bold"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Описание товара: "/>
+                                <TextBlock Text="{Binding Path=Product.Description}"  TextWrapping="Wrap" Width="250"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Производитель: "/>
+                                <TextBlock Text="{Binding Path=Product.Manufacturer.Title}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Поставщик: "/>
+                                <TextBlock Text="{Binding Path=Product.Supplier.Title}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Цена: "/>
+                                <TextBlock Text="{Binding Path=Product.Price}" Foreground="Red" TextDecorations="Strikethrough">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDiscounted}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Path=FinalPrice, StringFormat={} {0:N2} ₽}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Единица измерения: "/>
+                                <TextBlock Text="{Binding Path=Product.MeasurementUnit}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Количество на складе: "/>
+                                <TextBlock Text="{Binding Path=Product.Quantity}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Page>

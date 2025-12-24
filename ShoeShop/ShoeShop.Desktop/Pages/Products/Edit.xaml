@@ -1,0 +1,62 @@
+<Page x:Class="ShoeShop.Desktop.Pages.Products.Edit"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:ShoeShop.Desktop.Pages.Products"
+      mc:Ignorable="d"
+      Background="#7FFF00">
+    <StackPanel HorizontalAlignment="Center" Margin="20" Background="White">
+        <StackPanel Orientation="Horizontal" Margin="20 0">
+            <StackPanel Width="300">
+                <Label Content="Название"/>
+                <TextBox x:Name="TitleTextBox" Text="{Binding ElementName=_product, Path=Title, Mode=OneTime}"/>
+            
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <Label Content="Единица измерения"/>
+                        <TextBox x:Name="MeasurementUnitTextBox" Text="{Binding ElementName=_product, Path=MeasurementUnit, Mode=OneTime}"/>
+                    </StackPanel>
+                    <StackPanel Margin="40 0 0 0" Width="100">
+                        <Label Content="Цена"/>
+                        <TextBox x:Name="PriceTextBox" Text="{Binding ElementName=_product, Path=Price, Mode=OneTime}"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <Label Content="Поставщик"/>
+                <ComboBox x:Name="SupplierComboBox"/>
+            
+                <Label Content="Производитель"/>
+                <ComboBox x:Name="ManufacturerComboBox"/>
+            
+                <Label Content="Категория"/>
+                <ComboBox x:Name="CategoryComboBoxBox"/>
+                
+                <StackPanel Orientation="Horizontal" Margin=" 0 5 0 0">
+                    <StackPanel>
+                        <TextBlock Text="Скидка"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="DiscountTextBox" Width="30" Text="{Binding ElementName=_product, Path=Discount, Mode=OneTime}"/>
+                            <TextBlock Text=" %"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="40 0 0 0" Width="100">
+                        <TextBlock Text="Количество" TextAlignment="Center"/>
+                        <TextBox x:Name="QuantityTextBox" Width="40" Text="{Binding ElementName=_product, Path=Quantity, Mode=OneTime}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="20 0 0 0" Width="300">
+                <Label Content="Описание"/>
+                <TextBox x:Name="DescriptionTextBox" Height="100" TextWrapping="Wrap"/>
+            
+                <Label Content="Изображение"/>
+                <Image x:Name="Image" Width="300" Visibility="Collapsed"/>
+                <Button x:Name="ImageButton" Content="Загрузить изображение" Click="ImageButton_OnClick"/>
+            </StackPanel>
+        </StackPanel>
+        <Button x:Name="ActionButton" Margin="20 20" Click="ActionButton_OnClick"/>
+        <Button x:Name="CancelButton" Margin="20 0" Content="Отмена" Click="CancelButton_OnClick"/>
+    </StackPanel>
+   
+</Page>

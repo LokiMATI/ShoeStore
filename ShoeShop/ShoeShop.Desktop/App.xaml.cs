@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using ShoeShop.Library.Contexts;
 
 namespace ShoeShop.Desktop;
 
@@ -9,4 +10,7 @@ namespace ShoeShop.Desktop;
 /// </summary>
 public partial class App : Application
 {
+    public static string? Role { get; set; } = null;
+
+    public static bool IsCanEdit = false;
 }

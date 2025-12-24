@@ -92,6 +92,6 @@ public class ProductService(ShoeDbContext context)
     
     private static string GenerateArticle()
     {
-        return $"{Random.Shared.Next('A', 'Z' + 1)}{Random.Shared.Next(0, 10)}{Random.Shared.Next(0, 10)}{Random.Shared.Next(0, 10)}{Random.Shared.Next('A', 'Z' + 1)}{Random.Shared.Next(0, 10)}";
+        return $"{(char)Random.Shared.Next('A', 'Z' + 1)}{Random.Shared.Next(0, 10)}{Random.Shared.Next(0, 10)}{Random.Shared.Next(0, 10)}{(char)Random.Shared.Next('A', 'Z' + 1)}{Random.Shared.Next(0, 10)}";
     }
 }
