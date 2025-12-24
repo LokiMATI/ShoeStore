@@ -8,4 +8,35 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ShoeShop.Library\ShoeShop.Library.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="images\1.jpg" />
+      <Resource Include="images\1.jpg" />
+      <None Remove="images\2.jpg" />
+      <Resource Include="images\2.jpg" />
+      <None Remove="images\3.jpg" />
+      <Resource Include="images\3.jpg" />
+      <None Remove="images\4.jpg" />
+      <Resource Include="images\4.jpg" />
+      <None Remove="images\5.jpg" />
+      <Resource Include="images\5.jpg" />
+      <None Remove="images\6.jpg" />
+      <Resource Include="images\6.jpg" />
+      <None Remove="images\7.jpg" />
+      <Resource Include="images\7.jpg" />
+      <None Remove="images\8.jpg" />
+      <Resource Include="images\8.jpg" />
+      <None Remove="images\9.jpg" />
+      <Resource Include="images\9.jpg" />
+      <None Remove="images\10.jpg" />
+      <Resource Include="images\10.jpg" />
+      <None Remove="images\Icon.ico" />
+      <Resource Include="images\Icon.ico" />
+      <None Remove="images\picture.png" />
+      <Resource Include="images\picture.png" />
+    </ItemGroup>
+
 </Project>
