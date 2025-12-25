@@ -15,4 +15,6 @@ public partial class App : Application
     public static bool IsCanEdit = false;
 
     public static Window MainWindow { get; set; }
+    
+    public static string PageTitle { get; set; } = string.Empty;
 }

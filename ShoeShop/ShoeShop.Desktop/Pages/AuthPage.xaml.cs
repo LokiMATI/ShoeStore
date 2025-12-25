@@ -15,6 +15,7 @@ public partial class AuthPage : Page
     public AuthPage()
     {
         App.MainWindow.Title = "Авторизация";
+        App.PageTitle = "Авторизация";
         _context = new();
         InitializeComponent();
     }

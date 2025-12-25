@@ -13,6 +13,7 @@ public partial class ProductsList : Page
     public ProductsList()
     {
         App.MainWindow.Title = "Товары";
+        App.PageTitle = "Товары";
         InitializeComponent();
         
         EditStackPanel.Visibility = App.IsCanEdit ? Visibility.Visible : Visibility.Collapsed;

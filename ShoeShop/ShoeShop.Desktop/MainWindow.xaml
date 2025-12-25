@@ -10,14 +10,11 @@
         MinWidth="850"
         Icon="images/Icon.ico">
     
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
-    </Grid>
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5">
+            <Image Source="images/Icon.ico" Height="30"/>
+            <TextBlock x:Name="PageTitleTextBlock" FontSize="30" Margin="20 0 0 0"/>
+        </StackPanel>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Navigated="MainFrame_OnNavigated"/>
+    </DockPanel>
 </Window>

@@ -23,6 +23,7 @@ public partial class Edit : Page
     public Edit()
     {
         App.MainWindow.Title = "Страница редактирования";
+        App.PageTitle = "Страница редактирования";
         DataContext = this;
         
         InitializeComponent();
