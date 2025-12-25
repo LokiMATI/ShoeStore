@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -18,11 +19,10 @@ public partial class Edit : Page
     private Product _product = new();
     private string _imagePath = "";
     private bool _isCreated = true;
-    
-    private readonly ShoeDbContext _context = new();
 
     public Edit()
     {
+        App.MainWindow.Title = "Страница редактирования";
         DataContext = this;
         
         InitializeComponent();
@@ -36,7 +36,8 @@ public partial class Edit : Page
     
     public Edit(string article) : this()
     {
-        _product = _context.Products
+        ShoeDbContext context = new();
+        _product = context.Products
             .Include(p => p.Image)
             .Include(p => p.Category)
             .Include(p => p.Supplier)
@@ -56,9 +57,15 @@ public partial class Edit : Page
         DescriptionTextBox.Text = _product.Description;
         MeasurementUnitTextBox.Text = _product.MeasurementUnit;
         PriceTextBox.Text = _product.Price.ToString();
-        SupplierComboBox.SelectedIndex = SupplierComboBox.Items.IndexOf(_product.Supplier);
-        ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items.IndexOf(_product.Manufacturer);
-        CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items.IndexOf(_product.Category);
+        SupplierComboBox.SelectedIndex = SupplierComboBox.Items
+            .IndexOf(SupplierComboBox.Items.Cast<Supplier>().FirstOrDefault(s 
+                => s.SupplierId == _product.SupplierId));
+        ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items
+            .IndexOf(ManufacturerComboBox.Items.Cast<Manufacturer>().FirstOrDefault(m 
+                => m.ManufacturerId == _product.ManufacturerId));
+        CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items
+            .IndexOf(CategoryComboBoxBox.Items.Cast<Category>().FirstOrDefault(c 
+                => c.CategoryId == _product.CategoryId));
         DiscountTextBox.Text = _product.Discount.ToString();
         QuantityTextBox.Text = _product.Quantity.ToString();
 
@@ -85,7 +92,12 @@ public partial class Edit : Page
             if (!info.Exists)
                 throw new FileNotFoundException(info.FullName);
 
-            Image.Source = new BitmapImage(new Uri(_imagePath, UriKind.Relative));
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(_imagePath, UriKind.Absolute);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            Image.Source = bitmap;
         }
         catch (FileNotFoundException exception)
         {
@@ -97,14 +109,14 @@ public partial class Edit : Page
         }
     }
 
-    private void ActionButton_OnClick(object sender, RoutedEventArgs e)
+    private async void ActionButton_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
             if (_isCreated)
-                CreateProduct();
+                await CreateProductAsync();
             else
-                UpdateProduct();
+                await UpdateProductAsync();
 
             NavigationService.Navigate(new ProductsList());
         }
@@ -123,8 +135,9 @@ public partial class Edit : Page
         
     }
 
-    private void CreateProduct()
+    private async Task CreateProductAsync()
     {
+        ShoeDbContext context = new();
         if (string.IsNullOrWhiteSpace(TitleTextBox.Text) ||
             string.IsNullOrWhiteSpace(MeasurementUnitTextBox.Text) ||
             string.IsNullOrWhiteSpace(PriceTextBox.Text) ||
@@ -152,32 +165,34 @@ public partial class Edit : Page
         input.CategoryId = ((Category)CategoryComboBoxBox.SelectionBoxItem).CategoryId;
         input.Description = DescriptionTextBox.Text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(_imagePath) && _product.Image is not null && _product.Image.ImageId != 0)
+        if (!string.IsNullOrWhiteSpace(_imagePath))
         {
             FileInfo info = new(_imagePath);
             if (!info.Exists)
                 throw new FileNotFoundException(info.FullName);
 
             Library.Models.Image image = new();
-            image.ImageId = _context.Images.Count() + 1;
-            image.Name = $"images/{image.ImageId}.{info.Extension}";
-            image.Bytes = File.ReadAllBytes(_imagePath);
+            image.ImageId = context.Images.Count() + 1;
+            image.Name = $"images/{image.ImageId}{info.Extension}";
+            image.Bytes = await File.ReadAllBytesAsync(_imagePath);
+
+            var imagesPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+            File.Copy(info.FullName, Path.Combine(imagesPath, "images"), true);
             
-            File.Copy(info.FullName, $"../../{image.Name}", true);
-            
-            _context.Images.Add(image);
-            _context.SaveChanges();
+            context.Images.Add(image);
+            await context.SaveChangesAsync();
             
             input.ImageId = image.ImageId;
         }
 
-        ProductService service = new(_context);
+        ProductService service = new(context);
 
-        service.CreateAsync(input);
+        await service.CreateAsync(input);
     }
     
-    private void UpdateProduct()
+    private async Task UpdateProductAsync()
     {
+        ShoeDbContext context = new();
         if (string.IsNullOrWhiteSpace(TitleTextBox.Text) ||
             string.IsNullOrWhiteSpace(MeasurementUnitTextBox.Text) ||
             string.IsNullOrWhiteSpace(PriceTextBox.Text) ||
@@ -205,26 +220,41 @@ public partial class Edit : Page
         input.Category = ((Category)CategoryComboBoxBox.SelectionBoxItem).Title;
         input.Description = DescriptionTextBox.Text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(_imagePath) && _product.Image is not null && _product.Image.ImageId != 0)
+        if (!string.IsNullOrWhiteSpace(_imagePath))
         {
             FileInfo info = new(_imagePath);
             if (!info.Exists)
                 throw new FileNotFoundException(info.FullName);
 
-            Library.Models.Image image = new();
-            image.ImageId = _context.Images.Count() + 1;
-            image.Name = $"images/{image.ImageId}.{info.Extension}";
-            image.Bytes = File.ReadAllBytes(_imagePath);
+            var bytes = await File.ReadAllBytesAsync(_imagePath);
+            if (_product.Image is null || bytes != _product.Image.Bytes)
+            {
+                if (_product.Image is not null)
+                    _product.Image.Bytes = bytes;
+                else
+                {
+                    Library.Models.Image image = new();
+                    image.ImageId = context.Images.Count() + 1;
+                    image.Name = $"images/{image.ImageId}{info.Extension}";
+                    image.Bytes = bytes;
+                    var workPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+                    
+                    if (!Directory.Exists(Path.Combine(workPath, "images")))
+                        Directory.CreateDirectory(Path.Combine(workPath, "images"));
+                    
+                    await File.WriteAllBytesAsync( $"{Path.Combine(workPath, image.Name)}", image.Bytes);
             
-            _context.Images.Add(image);
-            _context.SaveChanges();
+                    context.Images.Add(image);
+                    await context.SaveChangesAsync();
             
-            input.ImageId = image.ImageId;
+                    input.ImageId = image.ImageId;
+                }
+            }
         }
 
-        ProductService service = new(_context);
+        ProductService service = new(context);
 
-        service.UpdateAsync(_product.Article, input);
+        await service.UpdateAsync(_product.Article, input);
     }
 
     private void CancelButton_OnClick(object sender, RoutedEventArgs e)
@@ -234,7 +264,8 @@ public partial class Edit : Page
     
     private void LoadManufacturers()
     {
-        var manufacturers = _context.Manufacturers.ToList();
+        ShoeDbContext context = new();
+        var manufacturers = context.Manufacturers.ToList();
         ManufacturerComboBox.ItemsSource = manufacturers;
         ManufacturerComboBox.DisplayMemberPath = "Title";
         
@@ -244,7 +275,8 @@ public partial class Edit : Page
     
     private void LoadSuppliers()
     {
-        var suppliers = _context.Suppliers.ToList();
+        ShoeDbContext context = new();
+        var suppliers = context.Suppliers.ToList();
         SupplierComboBox.ItemsSource = suppliers;
         SupplierComboBox.DisplayMemberPath = "Title";
         
@@ -254,7 +286,8 @@ public partial class Edit : Page
     
     private void LoadCategories()
     {
-        var categories = _context.Categories.ToList();
+        ShoeDbContext context = new();
+        var categories = context.Categories.ToList();
         CategoryComboBoxBox.ItemsSource = categories;
         CategoryComboBoxBox.DisplayMemberPath = "Title";
         

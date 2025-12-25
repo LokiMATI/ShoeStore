@@ -10,16 +10,16 @@
         <StackPanel Orientation="Horizontal" Margin="20 0">
             <StackPanel Width="300">
                 <Label Content="Название"/>
-                <TextBox x:Name="TitleTextBox" Text="{Binding ElementName=_product, Path=Title, Mode=OneTime}"/>
+                <TextBox x:Name="TitleTextBox"/>
             
                 <StackPanel Orientation="Horizontal">
                     <StackPanel>
                         <Label Content="Единица измерения"/>
-                        <TextBox x:Name="MeasurementUnitTextBox" Text="{Binding ElementName=_product, Path=MeasurementUnit, Mode=OneTime}"/>
+                        <TextBox x:Name="MeasurementUnitTextBox"/>
                     </StackPanel>
                     <StackPanel Margin="40 0 0 0" Width="100">
                         <Label Content="Цена"/>
-                        <TextBox x:Name="PriceTextBox" Text="{Binding ElementName=_product, Path=Price, Mode=OneTime}"/>
+                        <TextBox x:Name="PriceTextBox"/>
                     </StackPanel>
                 </StackPanel>
                 
@@ -36,13 +36,13 @@
                     <StackPanel>
                         <TextBlock Text="Скидка"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="DiscountTextBox" Width="30" Text="{Binding ElementName=_product, Path=Discount, Mode=OneTime}"/>
+                            <TextBox x:Name="DiscountTextBox" Width="30" />
                             <TextBlock Text=" %"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="40 0 0 0" Width="100">
                         <TextBlock Text="Количество" TextAlignment="Center"/>
-                        <TextBox x:Name="QuantityTextBox" Width="40" Text="{Binding ElementName=_product, Path=Quantity, Mode=OneTime}"/>
+                        <TextBox x:Name="QuantityTextBox" Width="40"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -51,7 +51,7 @@
                 <TextBox x:Name="DescriptionTextBox" Height="100" TextWrapping="Wrap"/>
             
                 <Label Content="Изображение"/>
-                <Image x:Name="Image" Width="300" Visibility="Collapsed"/>
+                <Image x:Name="Image" Height="200" Visibility="Collapsed"/>
                 <Button x:Name="ImageButton" Content="Загрузить изображение" Click="ImageButton_OnClick"/>
             </StackPanel>
         </StackPanel>

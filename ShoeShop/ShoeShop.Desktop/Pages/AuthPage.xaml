@@ -5,14 +5,19 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:ShoeShop.Desktop.Pages"
       mc:Ignorable="d"
-      Title="AuthPage" MinHeight="700" MinWidth="800">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+      Title="AuthPage"
+      Background="#7FFF00">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
         <Label Content="Логин(Email)"/>
         <TextBox x:Name="LoginTextBox" Width="200" Margin="20 5 20 5"/>
         
         <Label Content="Пароль"/>
         <PasswordBox x:Name="PasswordBox" Width="200" Margin="20 5 20 5"/>
         
-        <Button x:Name="LoginButton" Content="Войти" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonBase_OnClick"/>
+        <Button x:Name="LoginButton" Content="Войти"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Margin="20"
+                Click="ButtonBase_OnClick"/>
     </StackPanel>
 </Page>

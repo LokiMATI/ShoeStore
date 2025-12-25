@@ -10,10 +10,12 @@ namespace ShoeShop.Desktop.Pages;
 
 public partial class AuthPage : Page
 {
-    private readonly ShoeDbContext _context = new();
+    private readonly ShoeDbContext _context;
     
     public AuthPage()
     {
+        App.MainWindow.Title = "Авторизация";
+        _context = new();
         InitializeComponent();
     }
 

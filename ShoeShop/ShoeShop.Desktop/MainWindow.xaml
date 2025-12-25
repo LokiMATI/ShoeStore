@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:ShoeShop.Desktop"
         xmlns:library="clr-namespace:ShoeShop.Library.Models;assembly=ShoeShop.Library"
         mc:Ignorable="d"
-        Title="MainWindow"
         MinHeight="700"
-        MinWidth="850">
+        MinWidth="850"
+        Icon="images/Icon.ico">
     
     <Grid>
         <Grid.RowDefinitions>

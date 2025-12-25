@@ -13,4 +13,6 @@ public partial class App : Application
     public static string? Role { get; set; } = null;
 
     public static bool IsCanEdit = false;
+
+    public static Window MainWindow { get; set; }
 }

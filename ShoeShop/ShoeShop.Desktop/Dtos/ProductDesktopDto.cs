@@ -13,4 +13,6 @@ public class ProductDesktopDto
     public Product Product { get; set; }
     
     public string ImageUrl { get; set; } = "../../images/picture.png";
+    
+    public bool IsDiscountedMoreThenFifteen { get; set; }
 }

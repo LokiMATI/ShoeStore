@@ -66,6 +66,15 @@
                         
                         <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" Width="100">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsDiscountedMoreThenFifteen}" Value="True">
+                                                <Setter Property="Background" Value="#2E8B57"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
                                 <TextBlock Text="{Binding Path=Product.Discount}" TextAlignment="Center"/>
                                 <TextBlock Text="%" TextAlignment="Center"/>
                             </StackPanel>

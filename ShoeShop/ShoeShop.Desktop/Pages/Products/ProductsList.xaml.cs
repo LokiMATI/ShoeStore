@@ -9,10 +9,10 @@ namespace ShoeShop.Desktop.Pages.Products;
 
 public partial class ProductsList : Page
 {
-    private readonly ShoeDbContext _context = new();
     
     public ProductsList()
     {
+        App.MainWindow.Title = "Товары";
         InitializeComponent();
         
         EditStackPanel.Visibility = App.IsCanEdit ? Visibility.Visible : Visibility.Collapsed;
@@ -20,7 +20,7 @@ public partial class ProductsList : Page
         LoadSortCategory();
         LoadManufacturers();
         
-        LoadProducts();
+        LoadProductsAsync();
     }
     
     private void LoadSortCategory()
@@ -33,7 +33,8 @@ public partial class ProductsList : Page
     
     private void LoadManufacturers()
     {
-        var manufacturers = _context.Manufacturers.ToList();
+        ShoeDbContext context = new();
+        var manufacturers = context.Manufacturers.ToList();
         
         manufacturers.Add(new()
         {
@@ -46,9 +47,25 @@ public partial class ProductsList : Page
         ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items.Count - 1;
     }
     
-    private void LoadProducts()
+    private async Task LoadManufacturersAsync()
     {
-        var query = _context.Products
+        ShoeDbContext context = new();
+        var manufacturers = await context.Manufacturers.ToListAsync();
+        
+        manufacturers.Add(new()
+        {
+            ManufacturerId = 0,
+            Title = "Все"
+        });
+        
+        ManufacturerComboBox.ItemsSource = manufacturers;
+        ManufacturerComboBox.DisplayMemberPath = "Title";
+    }
+    
+    private async Task LoadProductsAsync()
+    {
+        ShoeDbContext context = new();
+        var query = context.Products
             .Include(p => p.Category)
             .Include(p => p.Manufacturer)
             .Include(p => p.Supplier)
@@ -77,13 +94,14 @@ public partial class ProductsList : Page
         query = DiscountCheckBox.IsChecked.Value ? query.Where(p => p.Discount > 0) : query;
         query = HasCheckBox.IsChecked.Value ? query.Where(p => p.Quantity > 0) : query;
 
-        var products = query.Select(p => new ProductDesktopDto()
+        var products = await query.Select(p => new ProductDesktopDto()
         {
             IsDiscounted = p.Discount > 0,
             IsHas = p.Quantity > 0,
             FinalPrice = p.Price * (1 - (decimal)p.Discount / 100),
-            Product = p
-        }).ToList();
+            Product = p,
+            IsDiscountedMoreThenFifteen = p.Discount > 15,
+        }).ToListAsync();
         foreach (var product in products)
         {
             if (product.Product.Image is not null)
@@ -94,19 +112,19 @@ public partial class ProductsList : Page
         ProductsListBox.ItemsSource = products;
     }
 
-    private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+    private async void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        LoadProducts();
+        await LoadProductsAsync();
     }
 
-    private void ComboBox_OnSelected(object sender, RoutedEventArgs e)
+    private async void ComboBox_OnSelected(object sender, RoutedEventArgs e)
     {
-        LoadProducts();
+        await LoadProductsAsync();
     }
 
-    private void CheckBox_StateChanged(object sender, RoutedEventArgs e)
+    private async void CheckBox_StateChanged(object sender, RoutedEventArgs e)
     {
-        LoadProducts();
+        await LoadProductsAsync();
     }
 
     private void CreateButton_OnClick(object sender, RoutedEventArgs e)
@@ -127,8 +145,9 @@ public partial class ProductsList : Page
         NavigationService.Navigate(new Edit(product.Product.Article));
     }
 
-    private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+    private async void DeleteButton_OnClick(object sender, RoutedEventArgs e)
     {
+        ShoeDbContext context = new();
         if (ProductsListBox.SelectedItems.Count == 0)
         {
             MessageBox.Show("Для удаление продуктов выберите хотя бы один продукт.", "Не выбран элемент", MessageBoxButton.OK, MessageBoxImage.Stop);
@@ -138,8 +157,8 @@ public partial class ProductsList : Page
         var products = ProductsListBox.SelectedItems.Cast<ProductDesktopDto>().ToList()
             .Select(p => p.Product);
         
-        _context.Products.RemoveRange(products);
-        _context.SaveChanges();
-        LoadProducts();
+        context.Products.RemoveRange(products);
+        await context.SaveChangesAsync();
+        LoadProductsAsync();
     }
 }

@@ -12,6 +12,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        App.MainWindow = this;
+        
         MainFrame.Navigate(new AuthPage());
     }
 }
