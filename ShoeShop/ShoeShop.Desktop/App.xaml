@@ -4,6 +4,35 @@
              xmlns:local="clr-namespace:ShoeShop.Desktop"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary>
+            
+            <FontFamily x:Key="TimesNewRoman">Times New Roman</FontFamily>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+            </Style>
+            
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+            </Style>
+            
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            
+            <Style TargetType="TextBox">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+            </Style>
+            
+            <Style TargetType="ComboBox">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+            </Style>
+            
+            <Style TargetType="Window">
+                <Setter Property="FontFamily" Value="{StaticResource TimesNewRoman}"/>
+            </Style>
+            
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
