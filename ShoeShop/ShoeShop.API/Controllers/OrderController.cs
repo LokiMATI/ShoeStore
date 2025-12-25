@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using ShoeShop.Library.Contexts;
 using ShoeShop.Library.Dtos.Orders;
 using ShoeShop.Library.Extensions.Orders;
-using ShoeShop.Library.Models;
 using ShoeShop.Library.Services;
 
 namespace ShoeShop.API.Controllers

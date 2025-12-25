@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShoeShop.Library.Contexts;
 using ShoeShop.Library.Dtos.Users;
+using ShoeShop.Library.Services;
 
 namespace ShoeShop.Web.Pages;
 
@@ -33,11 +34,7 @@ public class Login(ShoeDbContext context) : PageModel
             .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email == User.Email);
 
-        using var sha256 = SHA256.Create();
-        var passwordHash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(User.Password)))
-            .Replace("-", string.Empty);
-
-        if (user is null || !user.Passwordhash.Equals(passwordHash, StringComparison.InvariantCultureIgnoreCase))
+        if (user is null || !PasswordService.ValidatePassword(User.Password, user.Passwordhash))
             return Page();
 
         HttpContext.Session.SetString("Fullname", $"{user.Surname} {user.Name} {user.Patronymic ?? string.Empty}".Trim());

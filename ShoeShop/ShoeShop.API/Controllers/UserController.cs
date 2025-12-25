@@ -1,12 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using ShoeShop.API.Properties;
+using ShoeShop.API.Services;
 using ShoeShop.Library.Contexts;
 using ShoeShop.Library.Dtos.Users;
 
@@ -29,19 +25,8 @@ public class UserController(ShoeDbContext context) : ControllerBase
         if (user.Passwordhash.Equals(hash))
             return Unauthorized(hash);
 
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Email, user.Email),
-            new(ClaimsIdentity.DefaultRoleClaimType, user.Role.Title)
-        };
-        
-        var jwt = new JwtSecurityToken(
-            issuer: AuthOptions.ISSUER,
-            audience: AuthOptions.AUDIENCE,
-            claims: claims,
-            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(120)),
-            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-        
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
+        return JwtService.GenerateJwtToken(user.Email, user.Role.Title);
     }
+
+    
 }

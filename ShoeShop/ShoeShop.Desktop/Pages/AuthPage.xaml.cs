@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using ShoeShop.Desktop.Pages.Products;
 using ShoeShop.Library.Contexts;
+using ShoeShop.Library.Services;
 
 namespace ShoeShop.Desktop.Pages;
 
@@ -40,11 +41,8 @@ public partial class AuthPage : Page
             LoginButton.IsEnabled = true;
             return;
         }
-        
-        using var sha256 = SHA256.Create();
-        var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(PasswordBox.Password))).Replace("-", "");
 
-        if (!user.Passwordhash.Equals(hash, StringComparison.OrdinalIgnoreCase))
+        if (!PasswordService.ValidatePassword(PasswordBox.Password, user.Passwordhash))
         {
             MessageBox.Show("Неверный пароль!", "Некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
             PasswordBox.Password = string.Empty;
