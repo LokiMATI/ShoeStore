@@ -10,7 +10,12 @@ namespace ShoeShop.Library.Services;
 /// </summary>
 public class ProductService(ShoeDbContext context)
 {
-    public async Task<Product> CreateAsync(ProductCreateDto input)
+    /// <summary>
+    /// Создание товара
+    /// </summary>
+    /// <param name="input">Входные данные</param>
+    /// <returns>Созданный товар</returns>
+    public async Task<Product?> CreateAsync(ProductCreateDto input)
     {
         string article;
         do
@@ -39,6 +44,12 @@ public class ProductService(ShoeDbContext context)
         return product;
     }
 
+    /// <summary>
+    /// Обновление товара
+    /// </summary>
+    /// <param name="article">Артикль</param>
+    /// <param name="input">Входные данные</param>
+    /// <returns>Обновлённый товар</returns>
     public async Task<Product?> UpdateAsync(string article,ProductUpdateDto input)
     {
         var product = context.Products
@@ -71,6 +82,7 @@ public class ProductService(ShoeDbContext context)
 
         if (input.Category is not null)
         {
+            // Получение категории по названию
             var category = await context.Categories
                 .FirstOrDefaultAsync(c => c.Title == input.Category);
 

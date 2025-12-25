@@ -42,7 +42,7 @@ public partial class AuthPage : Page
             return;
         }
 
-        if (!PasswordService.ValidatePassword(PasswordBox.Password, user.Passwordhash))
+        if (!PasswordService.VerificationPassword(PasswordBox.Password, user.Passwordhash))
         {
             MessageBox.Show("Неверный пароль!", "Некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
             PasswordBox.Password = string.Empty;

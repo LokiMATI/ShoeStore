@@ -34,7 +34,7 @@ public class Login(ShoeDbContext context) : PageModel
             .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email == User.Email);
 
-        if (user is null || !PasswordService.ValidatePassword(User.Password, user.Passwordhash))
+        if (user is null || !PasswordService.VerificationPassword(User.Password, user.Passwordhash))
             return Page();
 
         HttpContext.Session.SetString("Fullname", $"{user.Surname} {user.Name} {user.Patronymic ?? string.Empty}".Trim());

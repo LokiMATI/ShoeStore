@@ -5,10 +5,19 @@ using ShoeShop.Library.Models;
 
 namespace ShoeShop.Library.Services;
 
+/// <summary>
+/// Сервис для работы с заказами
+/// </summary>
 public class OrderService(ShoeDbContext context)
 {
+    /// <summary>
+    /// Создание заказа
+    /// </summary>
+    /// <param name="input">Входные данные</param>
+    /// <returns>Созданный заказ</returns>
     public async Task<Order?> CreateAsync(OrderCreateDto input)
     {
+        // Генерация кода для получения заказа
         int code;
         do
         {
@@ -26,6 +35,7 @@ public class OrderService(ShoeDbContext context)
         };
         Dictionary<string, byte> articles = new();
 
+        // Подсчёт количества товаров по каждому артиклю 
         foreach (var article in input.Articles.Distinct())
             articles[article] = (byte)input.Articles.Count(a => a.Equals(article));
 
@@ -43,6 +53,12 @@ public class OrderService(ShoeDbContext context)
         return order;
     }
     
+    /// <summary>
+    /// Обновление заказа
+    /// </summary>
+    /// <param name="id">Идентификатор</param>
+    /// <param name="input">Входные данные</param>
+    /// <returns>Обновлённый заказ</returns>
     public async Task<Order?> UpdateAsync(int id, OrderUpdateDto input)
     {
         var order = await context.Orders

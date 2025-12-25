@@ -5,8 +5,17 @@ using ShoeShop.API.Properties;
 
 namespace ShoeShop.API.Services;
 
+/// <summary>
+/// Сервис для работы с JWT-токенами
+/// </summary>
 public static class JwtService
 {
+    /// <summary>
+    /// Генерация JWT-токена
+    /// </summary>
+    /// <param name="email">Email</param>
+    /// <param name="role">Роль</param>
+    /// <returns>JWT-токен</returns>
     public static string GenerateJwtToken(string email, string role)
     {
         var claims = new List<Claim>
