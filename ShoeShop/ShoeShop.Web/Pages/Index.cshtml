@@ -9,9 +9,16 @@
 
 <form method="get">
     <input type="text"
-        name="filmTitle"
-        value="@Model.SearchString"
-        placeholder="Поиск..."
+           name="filmTitle"
+           value="@Model.SearchString"
+           placeholder="Поиск..."
+           onchange="this.form.submit()"
+           class="form-control" />
+    
+    <input type="text"
+           name="maxPrice"
+           value="@Model.MaxPrice"
+           placeholder="Максимальная стоимость товара"
            onchange="this.form.submit()"
            class="form-control" />
 

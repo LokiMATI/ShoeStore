@@ -19,6 +19,9 @@ namespace ShoeShop.Web.Pages.Products
         
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? MaxPrice { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string? Manufacturer { get; set; } = "0";
@@ -58,6 +61,9 @@ namespace ShoeShop.Web.Pages.Products
             
             if (!string.IsNullOrEmpty(SearchString))
                 products = products.Where(p => p.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase));
+            
+            if (!string.IsNullOrEmpty(MaxPrice) && decimal.TryParse(MaxPrice, out decimal maxPrice))
+                products = products.Where(p => p.Price <= maxPrice);
 
             if (!string.IsNullOrWhiteSpace(Manufacturer) && int.TryParse(Manufacturer, out int manufacturerId) && manufacturerId != 0)
                 products = products.Where(p => p.ManufacturerId == manufacturerId);
