@@ -8,16 +8,17 @@
       Title="AuthPage"
       Background="#7FFF00">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
-        <Label Content="Логин(Email)"/>
-        <TextBox x:Name="LoginTextBox" Width="200" Margin="20 5 20 5"/>
+        <Label Content="Логин" FontSize="30" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="LoginTextBox" Width="200" Margin="20 5 20 5" FontSize="20"/>
         
-        <Label Content="Пароль"/>
-        <PasswordBox x:Name="PasswordBox" Width="200" Margin="20 5 20 5"/>
+        <Label Content="Пароль" FontSize="30" HorizontalContentAlignment="Center"/>
+        <PasswordBox x:Name="PasswordBox" Width="200" Margin="20 5 20 5" FontSize="20"/>
         
         <Button x:Name="LoginButton" Content="Войти"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Margin="20"
+                FontSize="30"
                 Click="ButtonBase_OnClick"/>
     </StackPanel>
 </Page>

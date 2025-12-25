@@ -17,26 +17,45 @@ namespace ShoeShop.Desktop.Pages.Products;
 public partial class Edit : Page
 {
     private Product _product = new();
-    private string _imagePath = "";
+    private string? _imagePath = null;
+    public BitmapImage? Image = null;
     private bool _isCreated = true;
-
+    private bool IsAllRequriedFieldsFilled =>
+        string.IsNullOrWhiteSpace(TitleTextBox.Text) ||
+        string.IsNullOrWhiteSpace(MeasurementUnitTextBox.Text) ||
+        string.IsNullOrWhiteSpace(PriceTextBox.Text) ||
+        SupplierComboBox.SelectionBoxItem is null ||
+        ManufacturerComboBox.SelectionBoxItem is null ||
+        CategoryComboBoxBox.SelectionBoxItem is null ||
+        string.IsNullOrWhiteSpace(DiscountTextBox.Text) ||
+        string.IsNullOrWhiteSpace(QuantityTextBox.Text) ||
+        string.IsNullOrWhiteSpace(DescriptionTextBox.Text);
+    
     public Edit()
     {
         App.MainWindow.Title = "Страница редактирования";
         App.PageTitle = "Страница редактирования";
         DataContext = this;
-        
         InitializeComponent();
-        
-        LoadManufacturers();
-        LoadSuppliers();
-        LoadCategories();
+        LoadComboBoxes();
 
-        ActionButton.Content = _isCreated ? "Создать" : "Редактировать";
+        ActionButton.Content = "Создать";
     }
-    
-    public Edit(string article) : this()
+
+    public Edit(string article)
     {
+        if (_product.Image is not null)
+        {
+            using MemoryStream stream = new(_product.Image.Bytes);
+            BitmapImage image = new();
+            image.BeginInit();
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.StreamSource = stream;
+            image.EndInit();
+            
+            ProductImage.Source = image;
+        }
+        
         ShoeDbContext context = new();
         _product = context.Products
             .Include(p => p.Image)
@@ -44,33 +63,20 @@ public partial class Edit : Page
             .Include(p => p.Supplier)
             .Include(p => p.Manufacturer)
             .FirstOrDefault(p => p.Article == article);
-        
         if (_product is null)
             NavigationService.GoBack();
-        _isCreated = false;
-        if (_product.Image is not null)
-        {
-            _imagePath = $"../../{_product.Image.Name}";
-            LoadImage();
-        }
         
-        TitleTextBox.Text = _product.Title;
-        DescriptionTextBox.Text = _product.Description;
-        MeasurementUnitTextBox.Text = _product.MeasurementUnit;
-        PriceTextBox.Text = _product.Price.ToString();
-        SupplierComboBox.SelectedIndex = SupplierComboBox.Items
-            .IndexOf(SupplierComboBox.Items.Cast<Supplier>().FirstOrDefault(s 
-                => s.SupplierId == _product.SupplierId));
-        ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items
-            .IndexOf(ManufacturerComboBox.Items.Cast<Manufacturer>().FirstOrDefault(m 
-                => m.ManufacturerId == _product.ManufacturerId));
-        CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items
-            .IndexOf(CategoryComboBoxBox.Items.Cast<Category>().FirstOrDefault(c 
-                => c.CategoryId == _product.CategoryId));
-        DiscountTextBox.Text = _product.Discount.ToString();
-        QuantityTextBox.Text = _product.Quantity.ToString();
+        App.MainWindow.Title = "Страница редактирования";
+        App.PageTitle = "Страница редактирования";
+        DataContext = this;
+        InitializeComponent();
+        LoadComboBoxes();
+        
+        _isCreated = false;
+        
+        FillFields();
 
-        ActionButton.Content = _isCreated ? "Создать" : "Редактировать";
+        ActionButton.Content = "Редактировать";
     }
 
     private void ImageButton_OnClick(object sender, RoutedEventArgs e)
@@ -81,32 +87,7 @@ public partial class Edit : Page
         {
             _imagePath = dialog.FileName;
             LoadImage();
-            Image.Visibility = Visibility.Visible;
-        }
-    }
-
-    private void LoadImage()
-    {
-        try
-        {
-            FileInfo info = new(new Uri(_imagePath, UriKind.Relative).ToString());
-            if (!info.Exists)
-                throw new FileNotFoundException(info.FullName);
-
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(_imagePath, UriKind.Absolute);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            Image.Source = bitmap;
-        }
-        catch (FileNotFoundException exception)
-        {
-            MessageBox.Show($"Файл не был найден. ({exception.Message})", "Файл не найден", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        catch (Exception exception)
-        {
-            MessageBox.Show($"Возникла ошибка: {exception.Message}", "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            ProductImage.Visibility = Visibility.Visible;
         }
     }
 
@@ -133,21 +114,42 @@ public partial class Edit : Page
         {
             MessageBox.Show($"Возникла ошибка: {exception.Message}", "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-        
+    }
+    
+    private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        NavigationService.Navigate(new ProductsList());
     }
 
+    private void LoadImage()
+    {
+        try
+        {
+            FileInfo info = new(new Uri(_imagePath, UriKind.Relative).ToString());
+            if (!info.Exists)
+                throw new FileNotFoundException(info.FullName);
+
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(_imagePath, UriKind.Absolute);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            ProductImage.Source = bitmap;
+        }
+        catch (FileNotFoundException exception)
+        {
+            MessageBox.Show($"Файл не был найден. ({exception.Message})", "Файл не найден", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show($"Возникла ошибка: {exception.Message}", "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+    
     private async Task CreateProductAsync()
     {
         ShoeDbContext context = new();
-        if (string.IsNullOrWhiteSpace(TitleTextBox.Text) ||
-            string.IsNullOrWhiteSpace(MeasurementUnitTextBox.Text) ||
-            string.IsNullOrWhiteSpace(PriceTextBox.Text) ||
-            SupplierComboBox.SelectionBoxItem is null ||
-            ManufacturerComboBox.SelectionBoxItem is null ||
-            CategoryComboBoxBox.SelectionBoxItem is null ||
-            string.IsNullOrWhiteSpace(DiscountTextBox.Text) ||
-            string.IsNullOrWhiteSpace(QuantityTextBox.Text) ||
-            string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+        if (IsAllRequriedFieldsFilled)
         {
             throw new ArgumentException("Не заполнены все важные поля.");
         }
@@ -172,37 +174,21 @@ public partial class Edit : Page
             if (!info.Exists)
                 throw new FileNotFoundException(info.FullName);
 
-            Library.Models.Image image = new();
-            image.ImageId = context.Images.Count() + 1;
-            image.Name = $"images/{image.ImageId}{info.Extension}";
-            image.Bytes = await File.ReadAllBytesAsync(_imagePath);
-
-            var imagesPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
-            File.Copy(info.FullName, Path.Combine(imagesPath, "images"), true);
-            
-            context.Images.Add(image);
-            await context.SaveChangesAsync();
+            ImageService imageService = new(context);
+            var image = await imageService.AddAsync(await File.ReadAllBytesAsync(info.FullName));
             
             input.ImageId = image.ImageId;
         }
 
-        ProductService service = new(context);
+        ProductService productService = new(context);
 
-        await service.CreateAsync(input);
+        await productService.CreateAsync(input);
     }
     
     private async Task UpdateProductAsync()
     {
         ShoeDbContext context = new();
-        if (string.IsNullOrWhiteSpace(TitleTextBox.Text) ||
-            string.IsNullOrWhiteSpace(MeasurementUnitTextBox.Text) ||
-            string.IsNullOrWhiteSpace(PriceTextBox.Text) ||
-            SupplierComboBox.SelectionBoxItem is null ||
-            ManufacturerComboBox.SelectionBoxItem is null ||
-            CategoryComboBoxBox.SelectionBoxItem is null ||
-            string.IsNullOrWhiteSpace(DiscountTextBox.Text) ||
-            string.IsNullOrWhiteSpace(QuantityTextBox.Text) ||
-            string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+        if (IsAllRequriedFieldsFilled)
         {
             throw new ArgumentException("Не заполнены все важные поля.");
         }
@@ -234,19 +220,8 @@ public partial class Edit : Page
                     _product.Image.Bytes = bytes;
                 else
                 {
-                    Library.Models.Image image = new();
-                    image.ImageId = context.Images.Count() + 1;
-                    image.Name = $"images/{image.ImageId}{info.Extension}";
-                    image.Bytes = bytes;
-                    var workPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
-                    
-                    if (!Directory.Exists(Path.Combine(workPath, "images")))
-                        Directory.CreateDirectory(Path.Combine(workPath, "images"));
-                    
-                    await File.WriteAllBytesAsync( $"{Path.Combine(workPath, image.Name)}", image.Bytes);
-            
-                    context.Images.Add(image);
-                    await context.SaveChangesAsync();
+                    ImageService imageService = new(context);
+                    var image = await imageService.AddAsync(await File.ReadAllBytesAsync(info.FullName));
             
                     input.ImageId = image.ImageId;
                 }
@@ -257,10 +232,12 @@ public partial class Edit : Page
 
         await service.UpdateAsync(_product.Article, input);
     }
-
-    private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+    
+    private void LoadComboBoxes()
     {
-        NavigationService.Navigate(new ProductsList());
+        LoadManufacturers();
+        LoadSuppliers();
+        LoadCategories();
     }
     
     private void LoadManufacturers()
@@ -294,5 +271,24 @@ public partial class Edit : Page
         
         if (!_isCreated)
             CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items.IndexOf(_product.Category);
+    }
+    
+    private void FillFields()
+    {
+        TitleTextBox.Text = _product.Title;
+        DescriptionTextBox.Text = _product.Description;
+        MeasurementUnitTextBox.Text = _product.MeasurementUnit;
+        PriceTextBox.Text = _product.Price.ToString();
+        SupplierComboBox.SelectedIndex = SupplierComboBox.Items
+            .IndexOf(SupplierComboBox.Items.Cast<Supplier>().FirstOrDefault(s 
+                => s.SupplierId == _product.SupplierId));
+        ManufacturerComboBox.SelectedIndex = ManufacturerComboBox.Items
+            .IndexOf(ManufacturerComboBox.Items.Cast<Manufacturer>().FirstOrDefault(m 
+                => m.ManufacturerId == _product.ManufacturerId));
+        CategoryComboBoxBox.SelectedIndex = CategoryComboBoxBox.Items
+            .IndexOf(CategoryComboBoxBox.Items.Cast<Category>().FirstOrDefault(c 
+                => c.CategoryId == _product.CategoryId));
+        DiscountTextBox.Text = _product.Discount.ToString();
+        QuantityTextBox.Text = _product.Quantity.ToString();
     }
 }

@@ -43,7 +43,7 @@
         <ListBox x:Name="ProductsListBox"
                  MinHeight="500"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                 HorizontalAlignment="Stretch"
+                 HorizontalContentAlignment="Stretch"
                  SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -61,50 +61,59 @@
                             </Style>
                         </DockPanel.Style>
                         <Image DockPanel.Dock="Left"
-                               Source="{Binding Path=ImageUrl}"
-                               Width="200"/>
+                               Source="{Binding Path=Image}"
+                               Height="250"/>
                         
-                        <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Width="100">
-                                <StackPanel.Style>
-                                    <Style TargetType="StackPanel">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsDiscountedMoreThenFifteen}" Value="True">
-                                                <Setter Property="Background" Value="#2E8B57"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Style>
-                                <TextBlock Text="{Binding Path=Product.Discount}" TextAlignment="Center"/>
-                                <TextBlock Text="%" TextAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
+                        <TextBlock Text="{Binding Path=Product.Discount, StringFormat={}{0} %}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   TextAlignment="Center"
+                                   FontSize="40"
+                                   Width="200"
+                                   DockPanel.Dock="Right">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsDiscountedMoreThenFifteen}" Value="True">
+                                            <Setter Property="Background" Value="#2E8B57"/>
+                                            <Setter Property="FontFamily" Value="Times New Roman"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsDiscountedMoreThenFifteen}" Value="False">
+                                            <Setter Property="FontFamily" Value="Times New Roman"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         
-                        <StackPanel HorizontalAlignment="Stretch">
+                        <StackPanel HorizontalAlignment="Stretch" Margin="10">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Path=Product.Category.Title}" FontWeight="Bold"/>
-                                <TextBlock Text=" | " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Path=Product.Title}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Path=Product.Category.Title}" FontWeight="Bold" FontSize="36"/>
+                                <TextBlock Text=" | " FontWeight="Bold" FontSize="36"/>
+                                <TextBlock Text="{Binding Path=Product.Title}" FontWeight="Bold" FontSize="36"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Описание товара: "/>
-                                <TextBlock Text="{Binding Path=Product.Description}"  TextWrapping="Wrap" Width="250"/>
+                                <TextBlock Text="Описание товара: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.Description}"  TextWrapping="Wrap" Width="250" FontSize="20"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Производитель: "/>
-                                <TextBlock Text="{Binding Path=Product.Manufacturer.Title}"/>
+                                <TextBlock Text="Производитель: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.Manufacturer.Title}" FontSize="20"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Поставщик: "/>
-                                <TextBlock Text="{Binding Path=Product.Supplier.Title}"/>
+                                <TextBlock Text="Поставщик: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.Supplier.Title}" FontSize="20"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Цена: "/>
-                                <TextBlock Text="{Binding Path=Product.Price}" Foreground="Red" TextDecorations="Strikethrough">
+                                <TextBlock Text="Цена: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.Price}" 
+                                           Foreground="Red"
+                                           TextDecorations="Strikethrough"
+                                           FontSize="20">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -115,17 +124,17 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBlock Text="{Binding Path=FinalPrice, StringFormat={} {0:N2} ₽}"/>
+                                <TextBlock Text="{Binding Path=FinalPrice, StringFormat={} {0:N2} ₽}" FontSize="20"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Единица измерения: "/>
-                                <TextBlock Text="{Binding Path=Product.MeasurementUnit}"/>
+                                <TextBlock Text="Единица измерения: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.MeasurementUnit}" FontSize="20"/>
                             </StackPanel>
                             
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Количество на складе: "/>
-                                <TextBlock Text="{Binding Path=Product.Quantity}"/>
+                                <TextBlock Text="Количество на складе: " FontSize="20"/>
+                                <TextBlock Text="{Binding Path=Product.Quantity}" FontSize="20"/>
                             </StackPanel>
                         </StackPanel>
                     </DockPanel>

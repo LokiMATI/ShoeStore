@@ -103,7 +103,7 @@ public class ProductService(ShoeDbContext context)
         await context.SaveChangesAsync();
         
         return product;
-    } 
+    }
     
     private static string GenerateArticle()
     {

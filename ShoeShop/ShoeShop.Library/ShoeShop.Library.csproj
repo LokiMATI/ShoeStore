@@ -16,4 +16,10 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="PresentationCore">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.22\PresentationCore.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

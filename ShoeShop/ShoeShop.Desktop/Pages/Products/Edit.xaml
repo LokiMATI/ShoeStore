@@ -51,7 +51,7 @@
                 <TextBox x:Name="DescriptionTextBox" Height="100" TextWrapping="Wrap"/>
             
                 <Label Content="Изображение"/>
-                <Image x:Name="Image" Height="200" Visibility="Collapsed"/>
+                <Image x:Name="ProductImage" Height="200" Visibility="Collapsed" Source="{Binding Path=Image}"/>
                 <Button x:Name="ImageButton" Content="Загрузить изображение" Click="ImageButton_OnClick"/>
             </StackPanel>
         </StackPanel>

@@ -1,5 +1,7 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
 using ShoeShop.Desktop.Dtos;
 using ShoeShop.Library.Contexts;
@@ -106,7 +108,22 @@ public partial class ProductsList : Page
         foreach (var product in products)
         {
             if (product.Product.Image is not null)
-                product.ImageUrl = $@"..\..\{product.Product.Image.Name}";
+            {
+                using MemoryStream stream = new(product.Product.Image.Bytes);
+                BitmapImage image = new();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = stream;
+                image.EndInit();
+                
+                product.Image = image;
+            }
+            else
+            {
+                product.Image = new BitmapImage(
+                    new Uri("../../images/picture.png", UriKind.Relative)
+                );
+            }
         }
             
 

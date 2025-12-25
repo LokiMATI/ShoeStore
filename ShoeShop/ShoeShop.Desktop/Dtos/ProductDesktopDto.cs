@@ -1,3 +1,4 @@
+using System.Windows.Media.Imaging;
 using ShoeShop.Library.Models;
 
 namespace ShoeShop.Desktop.Dtos;
@@ -12,7 +13,7 @@ public class ProductDesktopDto
     
     public Product Product { get; set; }
     
-    public string ImageUrl { get; set; } = "../../images/picture.png";
+    public BitmapImage Image { get; set; }
     
     public bool IsDiscountedMoreThenFifteen { get; set; }
 }
